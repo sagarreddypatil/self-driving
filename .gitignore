@@ -447,5 +447,6 @@ __pycache__/
 
 *.sln
 *.pyproj
+settings.json
 
 # End of https://www.gitignore.io/api/visualstudio
