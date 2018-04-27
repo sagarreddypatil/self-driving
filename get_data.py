@@ -13,12 +13,12 @@ mon = {'top': 38, 'left': 0, 'width': 800, 'height': 600}
 data = []
 
 counter = 1
-num_files = 0
-
-paused = True
+num_files = 12
+cv2.imshow("Recorded", np.zeros((300, 400, 3), np.int32))
 
 while True:
     axes = controller.gamepad
+    btns = controller.buttons
     thumb_lx = axes['thumb_lx']
     thumb_lx = float(thumb_lx) / 32768.0
     thumb_lx = float("%5.3f" % thumb_lx)
@@ -34,25 +34,26 @@ while True:
 
     img = np.array(sct.grab(mon))
     img = cv2.cvtColor(img, cv2.COLOR_BGRA2RGB)
-    img = cv2.resize(img, (200, 150))
-    if not paused:
+    img = cv2.resize(img, (400, 300))
+    keys = key_check()
+    cv2.imshow("Live", img)
+    if "Y" in btns:
+        cv2.imshow("Recorded", img)
         joyKeys = [thumb_lx, trigger]
 
         data.append([img, joyKeys])
 
         counter = counter + 1
-        
+        print(counter)
+    if(data == []):
+        cv2.imshow("Recorded", np.zeros((300, 400, 3), np.int32))
+    cv2.waitKey(1)
     keys = key_check()
-    if "L" in keys:
-        if paused:
-            paused = False
-            print('unpaused!')
-            time.sleep(0.4)
-        else:
-            print('Pausing!')
-            paused = True
-            time.sleep(0.5)
-            num_files = num_files + 1
-            np.save("data/data" + str(num_files) + ".npy", data)
-            data = []
-    print(counter)
+    btns = controller.buttons
+    if "DPAD_DOWN" in btns:
+        print("Saving!")
+        time.sleep(0.5)
+        num_files = num_files + 1
+        np.save("data/data" + str(num_files) + ".npy", data)
+        data = []
+        print("Saved! You can now continue.")

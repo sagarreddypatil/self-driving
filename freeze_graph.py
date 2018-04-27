@@ -59,7 +59,7 @@ def freeze_graph(model_dir, output_node_names):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_dir", type=str, default="C:\\Users\\SagarVeeru\\Documents\\SagarStuff\\Code\\Python\\self-driving\\model", help="Model folder to export")
-    parser.add_argument("--output_node_names", type=str, default="output", help="The name of the output nodes, comma separated.")
+    parser.add_argument("--output_node_names", type=str, default="output/BiasAdd", help="The name of the output nodes, comma separated.")
     args = parser.parse_args()
 
     freeze_graph(args.model_dir, args.output_node_names)

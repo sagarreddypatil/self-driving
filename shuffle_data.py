@@ -1,7 +1,7 @@
 import numpy as np
 
 final = []
-for b in range(1, 10):
+for b in range(1, 12+1):
     data = np.load("data/data" + str(b) + ".npy")
     if b == 1:
         final = data
