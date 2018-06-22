@@ -31,14 +31,16 @@ dropout = tf.layers.dropout
  
 print("Done importing libraries")
  
-input_tensor = tf.placeholder(tf.float32, [None, 150, 200, 3], name='input_tensor')
+input_tensor = tf.placeholder(tf.float32, [None, 150, 200, 3], name='input_tensor') # 150x200 has the same aspect ratio as 300x400
 y_true = tf.placeholder(tf.float32, [None, 2], name='y_true')
 training = tf.placeholder(tf.bool, name='training')
  
 model = input_tensor
- 
-model = tf.subtract(tf.divide(model, 127.5), 1.0, name='normalize')
- 
+
+#TODO: CHANGE THE NORMALISATION FROM -1 TO 1 TO 0 TO 1 BECAUSE ACTIVATION FUNCTION IS RELU AND IT WILL DISCARD ANY NEGATIVE VALUE
+model = tf.subtract(tf.divide(model, 127.5), 1.0, name='normalize') #each pixel has range of 0 to 255. This is to scale 0 to 255 to -1 to 1
+#Below is from AlexNet model
+
 model = conv_2d(model, 96, 11, strides=4, activation=tf.nn.relu, padding='same')
 model = max_pool_2d(model, 3, strides=2, padding='same')
 model = local_response_normalization(model)
@@ -66,18 +68,17 @@ model = fully_connected(model, 4096, activation=tf.nn.tanh)
 model = dropout(model, 0.5, training)
 model = fully_connected(model, 4096, activation=tf.nn.tanh)
 model = dropout(model, 0.5, training)
-model = fully_connected(model, 2)
- 
-output = tf.multiply(model, 1.0, name='output')
+model = fully_connected(model, 2) #TODO: CHANGE ACTIVATION FUNCTION TO TANH BECAUSE THE VALUES WE NEED IS BETWEEN -1 AND 1 
+output = tf.multiply(model, 1.0, name='output') #Just to get an output node for later use
  
 print("MODEL DEFINED")
  
-loss = tf.reduce_mean(tf.losses.mean_squared_error(y_true, output))
+loss = tf.reduce_mean(tf.losses.mean_squared_error(y_true, output)) #For Regression Mean Squared Error is better
 optimizer = tf.train.AdamOptimizer(0.00007).minimize(loss)
  
 init_op = tf.global_variables_initializer()
 saver = tf.train.Saver(max_to_keep=1)
-tf.summary.scalar('loss', loss)
+tf.summary.scalar('loss', loss) #This is for TensorBoard loss graphs
 merged_summary_op = tf.summary.merge_all()
  
 data = np.load("data/final.npy")
@@ -93,7 +94,7 @@ print("STARTING TRAINING")
  
 with tf.Session() as sess:
     sess.run(init_op)
-    summary_writer = tf.summary.FileWriter("logs", graph=tf.get_default_graph())
+    summary_writer = tf.summary.FileWriter("logs", graph=tf.get_default_graph()) # THis is for Tensor Board
     total_counter = 0
     for a in range(1, EPOCHS + 1):
         #-------------------------EPOCH-------------------------
@@ -103,7 +104,7 @@ with tf.Session() as sess:
         idx = 0
         while not done:
             try:
-                img_tf = np.array(imgs[idx:idx+BATCH_SIZE], np.dtype('float32'))
+                img_tf = np.array(imgs[idx:idx+BATCH_SIZE], np.dtype('float32')) # splicing by batch size
                 ax_tf = np.array(axes[idx:idx+BATCH_SIZE], np.dtype('float32'))
  
                 if(ax_tf.size == 0):

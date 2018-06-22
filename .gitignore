@@ -6,6 +6,8 @@ OLDMODEL/*
 OLDLOGS/*
 OLDDATA/*
 
+data.zip
+
 # Created by https://www.gitignore.io/api/python,opencv,windows,visualstudiocode
 
 ### OpenCV ###
