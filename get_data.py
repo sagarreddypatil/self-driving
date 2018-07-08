@@ -32,7 +32,7 @@ while True:
     thumb_lx = apply_deadzone(thumb_lx) #thumb_lx is the steering angle between -1 and 1
     trigger = apply_deadzone(trigger) #Trigger is for both brake and acceleration(above zero is acceleration, below zero is brake)
 
-    img = np.array(sct.grab(mon)) #converting PIL image to numpy array. For CSV Panda's frame is better. FOr image Numpy array is better
+    img = np.array(sct.grab(mon)) #converting PIL image to numpy array.
     img = cv2.cvtColor(img, cv2.COLOR_BGRA2RGB) #converting BGRA color format to RGB. Identified it as BGRA color as I was getting 4D data from Numpy array
     img = cv2.resize(img, (400, 300)) #reducing the size to 400 x 300 to reduce the training size
     keys = key_check() #check what keyboard keys are pressed
