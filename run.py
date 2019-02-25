@@ -24,16 +24,17 @@ with tf.Session(graph=graph) as sess:
     print("STARTING YAAY")
     while True:
         img = np.array(sct.grab(mon))
+        cv2.imshow("Seen", img)
         img = cv2.cvtColor(img, cv2.COLOR_BGRA2RGB)
         img = cv2.resize(img, (200, 150))
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            break
         ans = sess.run(output, feed_dict={input_tensor: np.array([img])})
 
         print(ans[0])
 
         xa = ans[0][0]
         ya = ans[0][1]
-
-        ya = ya * 0.5
 
         if xa > 1:
             xa = 1

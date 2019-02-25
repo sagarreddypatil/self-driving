@@ -8,12 +8,13 @@ import time
 
 controller = pyxinput.rController(1)
 sct = mss()
-mon = {'top': 38, 'left': 0, 'width': 800, 'height': 600}
+mon = {'top': 31, 'left': 1, 'width': 800, 'height': 600}
 
-data = []
+data_x = []
+data_y = []
 
 counter = 1
-num_files = 12
+num_files = 8
 cv2.imshow("Recorded", np.zeros((300, 400, 3), np.int32))
 
 while True:
@@ -38,15 +39,15 @@ while True:
     keys = key_check() #check what keyboard keys are pressed
     cv2.imshow("Live", img)
     if "Y" in btns: #If controller button "Y" is pressed, then keep recording and append to data array
-        cv2.imshow("Recorded", img)
+        cv2.putText(img, "Recording", (0, 130), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+        
         joyKeys = [thumb_lx, trigger]
-
-        data.append([img, joyKeys])
+        data_x.append(img)
+        data_y.append(joyKeys)
 
         counter = counter + 1
         print(counter)
-    if(data == []):
-        cv2.imshow("Recorded", np.zeros((300, 400, 3), np.int32))
+    cv2.imshow("Recorded", img)
     cv2.waitKey(1)
     keys = key_check()
     btns = controller.buttons
@@ -54,6 +55,12 @@ while True:
         print("Saving!")
         time.sleep(0.5)
         num_files = num_files + 1
-        np.save("data/data" + str(num_files) + ".npy", data)
-        data = []
+        np.savez("./data/data" + str(num_files) + ".npz", x=data_x, y=data_y)
+        data_x = []
+        data_y = []
         print("Saved! You can now continue.")
+    if "DPAD_UP" in btns:
+        print("Deleting!")
+        time.sleep(0.5)
+        data_x = []
+        data_y = []
