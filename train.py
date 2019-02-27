@@ -94,7 +94,7 @@ print("STARTING TRAINING")
  
 with tf.Session() as sess:
     sess.run(init_op)
-    summary_writer = tf.summary.FileWriter("logs", graph=tf.get_default_graph()) # THis is for Tensor Board
+    summary_writer = tf.summary.FileWriter("logs", graph=tf.get_default_graph()) # This is for Tensor Board
     total_counter = 0
     for a in range(1, EPOCHS + 1):
         #-------------------------EPOCH-------------------------
