@@ -47,14 +47,19 @@ final_model.compile(loss='mse', metrics=['mse', 'mae', 'mape'], optimizer=tf.ker
 
 #------------------------------------------------------MODEL DONE------------------------------------------------------#
 
-#import numpy as np
+print("MODEL MADE")
 
-#data = np.load("data/data.npz")
+import numpy as np
 
-#data_x = data['x']
-#data_y = data['y']
-#del data
+data = np.load("data/data.npz")
+
+data_x = data['x']
+data_y = data['y']
+del data
+
+print("DATA LOADED")
 
 tfboard = tf.keras.callbacks.TensorBoard(update_freq='batch')
-checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath="./model_keras", monitor='mse', mode='min', save_best_only=True)
+checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath="./model_keras/model.hdf5", monitor='loss')
 
+final_model.fit(data_x, data_y, batch_size=42, epochs=100, callbacks=[tfboard, checkpoint])
