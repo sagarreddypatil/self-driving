@@ -6,14 +6,14 @@ final_arrs_y = []
 
 print("Started Doing Data")
 
-i = 4
+i = 8
 data = np.load("data/data" + str(i) + ".npz")
 data_x = data["x"]
 data_y = data["y"]
 del data
 
 final_arrs_y.append(data_y)
-ongoing = [data_x[0] for i in range(10)]
+ongoing = [data_x[0] for b in range(10)]
 x_to_append = []
 for d in data_x:
     ongoing.pop(0)

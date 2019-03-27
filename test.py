@@ -1,14 +1,15 @@
-import cv2
-from mss import mss
 import numpy as np
 
-cap = cv2.VideoCapture(0)
-sct = mss()
-mon = {'top': 31, 'left': 1, 'width': 800, 'height': 600}
 
-while True:
-    img = np.array(sct.grab(mon))
-    cv2.imshow("yeah", img)
+X = np.load("data/datas1.npz")['x']
+y = np.load("data/datas1.npz")['y']
 
-    if cv2.waitKey(1) & 0xFF == ord("q"):
-        break
+print("Done array 1")
+
+for i in range(2, 9):
+    X = np.concatenate((X, np.load("data/datas" + str(i) + ".npz")['x']))
+    y = np.concatenate((y, np.load("data/datas" + str(i) + ".npz")['y']))
+    print("Done array {}".format(i))
+
+from sklearn.utils import shuffle
+X, y = shuffle(X, y)
